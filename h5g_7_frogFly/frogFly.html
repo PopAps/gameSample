@@ -1,0 +1,110 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Frog Hunter Game</title>
+    <style type="text/css">
+        #reset{
+            position: absolute;
+            left: 10%;
+            top: 430px;
+        }
+    </style>
+    <script type="text/javascript" src="simpleGame.js"></script>
+    <script type="text/javascript" src="frogLib.js"></script>
+    <script type="text/javascript">
+
+        var scene;
+        var frog;
+        var fly;
+        var flies;
+
+        var hits;
+        var timer;
+        var time;
+
+        var NUMFLIES = 5;
+        var MAXTIME = 30;
+
+        //--------------------------init----------------------------------
+        function init() {
+            hits = 0;
+            timer = new Timer();
+            scene = new Scene();
+            leaves = new Sprite(scene, "leaves.png", 640, 480);
+            leaves.setSpeed(0);
+
+            frog = new Frog();
+            setupFlies();
+
+            ribbitMP3 = new Sound("ribit.mp3");
+
+            scene.start();
+        }
+
+        //--------------------------update----------------------------------
+        function update() {
+            scene.clear();
+            checkTime();
+            frog.moveKeys();
+
+            //update
+            leaves.update();
+            frog.update();
+            for (i = 0; i < NUMFLIES; i++) {
+                flies[i].wriggle();
+                checkCollision(i);
+                flies[i].update();
+            }
+        }
+
+        //--------------------------checkCollision-------------------------
+        function checkCollision(flyNum) {
+            if (frog.collidesWith(flies[flyNum])) {
+                hits++;
+                updateScore();
+                ribbitMP3.play();
+                flies[flyNum].reset();
+            }
+        }
+
+        //--------------------------setupFlies----------------------------
+        function setupFlies() {
+            flies = new Array(NUMFLIES);
+            for (i = 0; i < NUMFLIES; i++) {
+                flies[i] = new Fly();
+            }
+        }
+
+        //--------------------------updateScore----------------------------
+        function updateScore() {
+            document.getElementById("scoreBoard").innerHTML = "Hits: " +hits
+            + "Time: " + time;
+        }
+
+        //---------------------------checkTime-----------------------------
+        function checkTime(){
+            time = timer.getElapsedTime();
+            if(time > MAXTIME){
+                scene.stop();
+            }
+            updateScore();
+        }
+
+        //---------------------------restart-----------------------------
+        function restart(){
+            document.location.href = "";
+        }
+    </script>
+</head>
+
+<body onload="init()">
+    <div id="scoreBoard">Hits: 0</div>
+    <div id="reset">
+        <button type="button" onclick="restart()" >Play Again</button>
+    </div>
+
+</body>
+
+</html>

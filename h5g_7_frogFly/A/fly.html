@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title>template for simple games</title>
+    <script type="text/javascript" src="simpleGame.js"></script>
+    <script type="text/javascript" src="frogLib.js"></script>
+    <script type="text/javascript">
+
+        var scene;
+        var fly;
+
+        function init() {
+            scene = new Scene();
+            scene.setBG("Green")
+            //fly = new Sprite(scene, "fly.png", 30, 30);
+
+            fly = new Fly();
+            scene.start();
+        }
+
+        function update() {
+            scene.clear();
+
+
+            fly.wriggle();
+
+            fly.update();
+        }
+    </script>
+</head>
+
+<body onload="init()">
+
+
+</body>
+
+</html>
